@@ -4,10 +4,8 @@ import argparse
 import platform
 import requests
 from tqdm import tqdm
-from time import sleep
 from shutil import copy
 from scapy.all import *
-from subprocess import call
 from bs4 import BeautifulSoup
 
 
