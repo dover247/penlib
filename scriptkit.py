@@ -1,10 +1,10 @@
 import os
 import re
-from argparse import *
 import platform
 import requests
 from tqdm import tqdm
 from shutil import copy
+from argparse import *
 from scapy.all import *
 from bs4 import BeautifulSoup
 
@@ -12,15 +12,31 @@ from bs4 import BeautifulSoup
 def arguments():
     # Program Usage. Returns arguments being passed in.
     parser = ArgumentParser(description='Info Gather/Post Exploitation Tool')
+
     parser.add_argument('-s', '--search', help='search file')
+
     parser.add_argument('-p', '--path', help='specify file path')
-    parser.add_argument('-sD', '--system', help='obtains system info', action='store_true')
-    parser.add_argument('-pI', '--public_ip', help='gets current public ipv4 address', action='store_true')
-    parser.add_argument('-g', '--genklogger', help='generates a keylogger', action='store_true')
-    parser.add_argument('-sR', '--scrape', help='scrapes links from a page')
-    parser.add_argument('-c', '--cookies', help='grabs locally stored cookies', action='store_true')
-    parser.add_argument('-S', '--sniff', help='sniff packets', action='store_true')
+
+    parser.add_argument('-sD', '--system',
+                        help='obtains system info', action='store_true')
+
+    parser.add_argument('-pI', '--public_ip',
+                        help='get current public address', action='store_true')
+
+    parser.add_argument('-g', '--genklogger',
+                        help='generates a keylogger', action='store_true')
+
+    parser.add_argument('-sR', '--scrape',
+                        help='scrapes links from a page')
+
+    parser.add_argument('-c', '--cookies', help='grabs locally stored cookies',
+                        action='store_true')
+
+    parser.add_argument('-S', '--sniff', help='sniff packets',
+                        action='store_true')
+
     parser.add_argument('-i', '--interface', help='specify NIC')
+
     args = parser.parse_args()
     search_string = args.search
     path_string = args.path
