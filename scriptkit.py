@@ -20,16 +20,16 @@ class ArgParser(ArgumentParser):
 
 
 class Seeker(object):
-        # loops  files given path and matches a particular string.
-        def __init_(self, filename_arg, path_arg):
-            self.filename = filename_arg.lower()
-            self.path = path_arg
+    # loops  files given path and matches a particular string.
+    def __init_(self, filename_arg, path_arg):
+        self.filename = filename_arg.lower()
+        self.path = path_arg
 
-        def search_file():
-            for path, directories, files in walk(self.path):
-                for file in files:
-                    if self.filename in file.lower():
-                        print path.join(path, file)
+    def search_file():
+        for path, directories, files in walk(self.path):
+            for file in files:
+                if self.filename in file.lower():
+                    print path.join(path, file)
 
 
 class System(object):
