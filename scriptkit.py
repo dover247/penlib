@@ -1,12 +1,13 @@
 import os
 import re
 import requests
-from platform import *
-from tqdm import tqdm
-from shutil import copy
-from argparse import *
-from bs4 import BeautifulSoup
 from socket import *
+from tqdm import tqdm
+from argparse import *
+from platform import *
+from shutil import copy
+from bs4 import BeautifulSoup
+
 
 class ArgParser(ArgumentParser):
     # Program Usage. Returns arguments being passed
@@ -34,8 +35,8 @@ class Seeker(object):
         return self
 
     def __exit__(self, type, error, traceback):
-        print(traceback)
-        print(error)
+        if error:
+            print(error)
 
 
 class System(object):
@@ -54,8 +55,8 @@ class System(object):
         return self
 
     def __exit__(self, type, error, traceback):
-        print(traceback)
-        print(error)
+        if error:
+            print(error)
 
 
 class Ip(object):
@@ -72,8 +73,8 @@ class Ip(object):
         return self
 
     def __exit__(self, type, error, traceback):
-        print(traceback)
-        print(error)
+        if error:
+            print(error)
 
 
 class Keylogger(object):
@@ -136,8 +137,8 @@ class Keylogger(object):
         return self
 
     def __exit__(self, type, error, traceback):
-        print(traceback)
-        print(error)
+        if error:
+            print(error)
 
 
 class Scrape(object):
@@ -148,7 +149,7 @@ class Scrape(object):
         self.href_parser = BeautifulSoup(self.content, "html.parser")
 
     def scrape(self):
-        for link in tqdm(self.href_parser.findAll('a')):
+        for link in self.href_parser.findAll('a'):
             print(link.get('href'))
 
     def __len__(self):
@@ -158,8 +159,8 @@ class Scrape(object):
         return self
 
     def __exit__(self, type, error, traceback):
-        print(traceback)
-        print(error)
+        if error:
+            print(error)
 
 
 class Cookiemonster(object):
@@ -193,7 +194,7 @@ class Cookiemonster(object):
             os.mkdir('cookiejar')
         for paths in self.cookie_paths:
             continue
-        for file in tqdm(os.listdir(paths)):
+        for file in os.listdir(paths):
             try:
                 copy(os.path.join(paths, file), self.cookiejar)
             except Exception as e:
@@ -214,8 +215,8 @@ class Cookiemonster(object):
         return self
 
     def __exit__(self, type, error, traceback):
-        print(traceback)
-        print(error)
+        if error:
+            print(error)
 
 
 class NetFuzzer(object):
@@ -227,9 +228,10 @@ class NetFuzzer(object):
 
     def fuzz(self, chars, length):
         self.Buffer = chars * length
+        self.sock.settimeout(5)
         self.sock.connect((self.host, self.port))
-        self.sock.send(self.Buffer)
-        return self.sock.recv(4096), self.Buffer
+        self.sock.send(self.Buffer.encode())
+        return self.sock.recv(4096).decode(),
 
     def __len__(self):
         return len(self.Buffer)
@@ -238,5 +240,5 @@ class NetFuzzer(object):
         return self
 
     def __exit__(self, type, error, traceback):
-        print(traceback)
-        print(error)
+        if error:
+            print(error)
