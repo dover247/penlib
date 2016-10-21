@@ -8,7 +8,6 @@ from argparse import *
 from bs4 import BeautifulSoup
 from socket import *
 
-
 class ArgParser(ArgumentParser):
     # Program Usage. Returns arguments being passed
     pass
@@ -19,31 +18,24 @@ class ArgParser(ArgumentParser):
     def parse(self):
         return self.parse_args()
 
-    def __enter__(self):
-        return self
-
-    def __exit__(self, type, error, traceback):
-        print traceback
-        print error
-
 
 class Seeker(object):
     # loops  files given path and matches a particular string.
     def __init__(self):
-        print 'Searching..'
+        print('Searching..')
 
     def search_file(self, filename, path):
         for path, directories, files in os.walk(path):
             for file in files:
                 if filename.lower() in file.lower():
-                    print os.path.join(path, file)
+                    print(os.path.join(path, file))
 
     def __enter__(self):
         return self
 
     def __exit__(self, type, error, traceback):
-        print traceback
-        print error
+        print(traceback)
+        print(error)
 
 
 class System(object):
@@ -62,8 +54,8 @@ class System(object):
         return self
 
     def __exit__(self, type, error, traceback):
-        print traceback
-        print error
+        print(traceback)
+        print(error)
 
 
 class Ip(object):
@@ -80,8 +72,8 @@ class Ip(object):
         return self
 
     def __exit__(self, type, error, traceback):
-        print traceback
-        print error
+        print(traceback)
+        print(error)
 
 
 class Keylogger(object):
@@ -144,8 +136,8 @@ class Keylogger(object):
         return self
 
     def __exit__(self, type, error, traceback):
-        print traceback
-        print error
+        print(traceback)
+        print(error)
 
 
 class Scrape(object):
@@ -157,7 +149,7 @@ class Scrape(object):
 
     def scrape(self):
         for link in tqdm(self.href_parser.findAll('a')):
-            print link.get('href')
+            print(link.get('href'))
 
     def __len__(self):
         return len(self.href_parser.findAll('a'))
@@ -166,8 +158,8 @@ class Scrape(object):
         return self
 
     def __exit__(self, type, error, traceback):
-        print traceback
-        print error
+        print(traceback)
+        print(error)
 
 
 class Cookiemonster(object):
@@ -175,24 +167,24 @@ class Cookiemonster(object):
     def __init__(self):
         self.user = os.environ.get('USERNAME')
         self.cookiejar = os.path.join(os.getcwd(), 'cookiejar')
-        self.cookie_paths = ['C:\users\{}\AppData\Local\MicrosoftEdge\Cookies'.format(self.user),
-                                'C:\users\{}\AppData\Local\Packages\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\AC\INetCookies'.format(self.user),
-                                'C:\users\{}\AppData\Local\Packages\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\AC\MicrosoftEdge\Cookies'.format(self.user),
-                                'C:\users\{}\AppData\Local\Packages\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\AC\#!001\INetCookies'.format(self.user),
-                                'C:\users\{}\AppData\Local\Packages\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\AC\#!001\MicrosoftEdge\Cookies'.format(self.user),
-                                'C:\users\{}\AppData\Local\Packages\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\AC\#!001\MicrosoftEdge\User\Default\DOMStore'.format(self.user),
-                                'C:\users\{}\AppData\Local\Packages\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\AC\#!002\INetCookies'.format(self.user),
-                                'C:\users\{}\AppData\Local\Packages\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\AC\#!002\MicrosoftEdge\Cookies'.format(self.user),
-                                'C:\users\{}\AppData\Local\Packages\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\AC\#!002\MicrosoftEdge\User\Default\DOMStore'.format(self.user),
-                                'C:\users\{}\AppData\Local\Google\Chrome\User Data\Default\Cookies'.format(self.user),
-                                'C:\Users\{}\AppData\Local\Microsoft\Windows\INetCookies'.format(self.user)]
+        self.cookie_paths = ['C:\\users\\{}\\AppData\\Local\\MicrosoftEdge\\Cookies'.format(self.user),
+                                'C:\\users\{}\\AppData\\Local\\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\INetCookies'.format(self.user),
+                                'C:\\users\\{}\\AppData\\Local\\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\MicrosoftEdge\\Cookies'.format(self.user),
+                                'C:\\users\\{}\\AppData\\Local\\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\#!001\\INetCookies'.format(self.user),
+                                'C:\\users\\{}\\AppData\\Local\\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\#!001\\MicrosoftEdge\\Cookies'.format(self.user),
+                                'C:\\users\\{}\\AppData\\Local\\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\#!001\\MicrosoftEdge\\User\\Default\\DOMStore'.format(self.user),
+                                'C:\\users\\{}\\AppData\\Local\\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\#!002\\INetCookies'.format(self.user),
+                                'C:\\users\\{}\\AppData\\Local\\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\#!002\\MicrosoftEdge\\Cookies'.format(self.user),
+                                'C:\\users\\{}\\AppData\\Local\\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\#!002\\MicrosoftEdge\\User\\Default\\DOMStore'.format(self.user),
+                                'C:\\users\\{}\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Cookies'.format(self.user),
+                                'C:\\Users\\{}\\AppData\\Local\\Microsoft\\Windows\\INetCookies'.format(self.user)]
 
     def show(self):
         for paths in self.cookie_paths:
             continue
         for file in tqdm(os.listdir(paths)):
             try:
-                print os.path.join(paths, file)
+                print(os.path.join(paths, file))
             except Exception as e:
                 pass
 
@@ -222,8 +214,8 @@ class Cookiemonster(object):
         return self
 
     def __exit__(self, type, error, traceback):
-        print traceback
-        print error
+        print(traceback)
+        print(error)
 
 
 class NetFuzzer(object):
@@ -246,9 +238,5 @@ class NetFuzzer(object):
         return self
 
     def __exit__(self, type, error, traceback):
-        print traceback
-        print error
-
-with ArgParser() as aarg:
-    aarg.add_option('-s', '--s')
-    aarg.parse()
+        print(traceback)
+        print(error)
