@@ -2,7 +2,6 @@ import os
 import re
 import requests
 from socket import *
-from tqdm import tqdm
 from argparse import *
 from platform import *
 from shutil import copy
@@ -11,15 +10,15 @@ from bs4 import BeautifulSoup
 
 class ArgParser(ArgumentParser):
     '''Program Usage. Returns arguments being passed'''
-    def add_option(self, option1, option2, descr=''):
-        self.add_argument(option1, option2, help=descr)
+    def add_option(self, arg, optional_arg, descr=''):
+        self.add_argument(arg, optional_arg, help=descr)
 
     def parse(self):
         return self.parse_args()
 
 
 class Seeker(object):
-    '''loops  files given path and matches a particular string.'''
+    '''loops files given path and matches a particular string.'''
     def __init__(self):
         self.count = []
 
@@ -57,7 +56,6 @@ class System(object):
             print(error)
 
     def get(self):
-        # Output The Result
         return self.platform, self.architecture, self.hostname, self.processor
 
 
@@ -202,7 +200,7 @@ class Cookiemonster(object):
     def show(self):
         for paths in self.cookie_paths:
             continue
-            for file in tqdm(os.listdir(paths)):
+            for file in os.listdir(paths):
                 try:
                     print(os.path.join(paths, file))
                 except Exception as e:
@@ -241,17 +239,17 @@ class NetFuzzer(object):
         self.buffer = chars * length
         return self.buffer
 
-    def fuzz(self, recvsize):
+    def fuzz(self):
         self.sock.settimeout(10)
         self.sock.connect((self.host, self.port))
         self.sock.recv(recvsize)
         self.sock.send(self.buffer.encode())
         self.sock.recv(recvsize)
-        return self.sock.recv(recvsize)
-
+        return self.sock.recv(4096)
 
     def status(self):
         service = socket()
+        service.settimeout(10)
         service.connect((self.host, self.port))
         if service.recv(4096):
             return True
@@ -259,7 +257,7 @@ class NetFuzzer(object):
 
 
 class SQLInject(object):
-    'SQL Injection'
+    '''SQL Injection'''
     def __init__(self, url):
         self.errors = []
         self.url = url
@@ -282,3 +280,37 @@ class SQLInject(object):
                 self.errors.append(error)
                 return True
         return False
+
+    def forminject(self, injection):
+        page = request.post(self.url, data=injection)
+
+
+class RouterDAuth(object):
+    '''Router Default Authentication Check'''
+    def __init__(self):
+        self.page = "http://www.routerpasswords.com/"
+    def __len__(self):
+        pass
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, error, traceback):
+        if error:
+            print(error)
+
+    def getpasswords(self, router):
+        payload = {"findpass": "1",
+                    "router": router,
+                    "findpassword": "Find Password"}
+        page = requests.post(self.page, data=payload)
+        parser = BeautifulSoup(page.content, 'html.parser')
+        routers = parser.findAll('td')[0::5]
+        models = parser.findAll('td')[1::5]
+        protocols = parser.findAll('td')[2::5]
+        usernames = parser.findAll('td')[3::5]
+        passwords = parser.findAll('td')[4::5]
+        return routers, models, protocols, usernames, passwords
+
+    def check(self):
+        pass
