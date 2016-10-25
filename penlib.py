@@ -289,6 +289,11 @@ class RouterDAuth(object):
     '''Router Default Authentication Check'''
     def __init__(self):
         self.page = "http://www.routerpasswords.com/"
+        self.models = []
+        self.protocols = []
+        self.usernames = []
+        self.passwords = []
+
     def __len__(self):
         pass
 
@@ -308,11 +313,10 @@ class RouterDAuth(object):
 
         for table_rows in parser.find_all('tr')[1:]:
             table_data = table_rows.find_all('td')
-            print("MODEL:{} PROTOCOL:{}\nUSERNAME:{} PASSWORD:{}\n".format(table_data[1].text,
-            table_data[2].text, table_data[3].text, table_data[4].text))
+            self.models.append(table_data[1].text)
+            self.protocols.append(table_data[2].text)
+            self.usernames.append(table_data[3].text)
+            self.passwords.append(table_data[4].text)
 
     def check(self):
         pass
-
-with RouterDAuth() as rda:
-    rda.getpasswords("belkin")
