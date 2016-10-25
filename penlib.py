@@ -305,12 +305,14 @@ class RouterDAuth(object):
                     "findpassword": "Find Password"}
         page = requests.post(self.page, data=payload)
         parser = BeautifulSoup(page.content, 'html.parser')
-        routers = parser.findAll('td')[0::5]
-        models = parser.findAll('td')[1::5]
-        protocols = parser.findAll('td')[2::5]
-        usernames = parser.findAll('td')[3::5]
-        passwords = parser.findAll('td')[4::5]
-        return routers, models, protocols, usernames, passwords
+
+        for table_rows in parser.find_all('tr')[1:]:
+            table_data = table_rows.find_all('td')
+            print("MODEL:{} PROTOCOL:{}\nUSERNAME:{} PASSWORD:{}\n".format(table_data[1].text,
+            table_data[2].text, table_data[3].text, table_data[4].text))
 
     def check(self):
         pass
+
+with RouterDAuth() as rda:
+    rda.getpasswords("belkin")
