@@ -1,9 +1,16 @@
-# penlib
+# Penlib
 A Python3 Penetration Testing Package
-# requirements
+# Requirements
 - bs4
 - requests
 
-# installing penlib
+# Installing Penlib
 pip install penlib
 
+# Create RouterDAuth Object To Check Defaults
+from penlib import *
+
+rda = RouterDAuth()
+
+# Help
+use help() as reference
