@@ -40,4 +40,3 @@ class NetFuzzer(object):
         if service.recv(4096):
             return True
         return False
-x
