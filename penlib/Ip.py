@@ -14,9 +14,9 @@ class Ip(object):
         if error:
             print(error)
 
-    '''requests a page and uses regular expressions to extract the Ip
-        and returns the value'''
     def get(self):
+        '''requests a page and uses regular expressions to extract the Ip
+            and returns the value'''
         request = requests.get(self.url)
         ip = re.findall("\d{1,3}\.\d{1,3}\.\d{1,3}.\d{1,3}", request.text)[0]
         return ip

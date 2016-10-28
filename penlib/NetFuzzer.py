@@ -18,13 +18,13 @@ class NetFuzzer(object):
         if error:
             print(error)
 
-    '''creates a buffer'''
     def buildbuffer(self, chars, length):
+        '''creates a buffer'''
         self.buffer = chars * length
         return self.buffer
 
-    '''fuzzez the target'''
     def fuzz(self):
+        '''fuzzez the target'''
         self.sock.settimeout(10)
         self.sock.connect((self.host, self.port))
         self.sock.recv(recvsize)
@@ -32,8 +32,8 @@ class NetFuzzer(object):
         self.sock.recv(recvsize)
         return self.sock.recv(4096)
 
-    '''checks if service is still running'''
     def status(self):
+        '''checks if service is still running'''
         service = socket()
         service.settimeout(10)
         service.connect((self.host, self.port))

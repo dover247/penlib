@@ -19,7 +19,7 @@ class Scrape(object):
         if error:
             print(error)
 
-    '''within finding all "a" tags prints the reference links'''
     def scrape(self):
+        '''within finding all "a" tags prints the reference links'''
         for link in self.href_parser.findAll("a"):
             print(link.get("href"))

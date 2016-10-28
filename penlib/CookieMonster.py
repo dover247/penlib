@@ -35,8 +35,8 @@ class CookieMonster(object):
         if error:
             print(error)
 
-    '''attempts to display all cookies'''
     def show(self):
+        '''attempts to display all cookies'''
         for paths in self.cookie_paths:
             try:
                 for filename in os.listdir(paths):
@@ -44,8 +44,8 @@ class CookieMonster(object):
             except Exception as e:
                 pass
 
-    '''save cookies to a directory using a path'''
     def save(self, path, dir_name):
+        '''save cookies to a directory using a path'''
         cookie_jar = os.path.join(path, dir_name)
         if not os.path.exists(cookie_jar):
             os.mkdir(dirame)
@@ -55,4 +55,3 @@ class CookieMonster(object):
                         copy(os.path.join(paths, filename), cookie_jar)
                 except Exception as e:
                     pass
-

@@ -56,8 +56,8 @@ class Keylogger(object):
         if error:
             print(error)
 
-    '''creates a file and writes the source code'''
     def save(self, filename):
+        '''creates a file and writes the source code'''
         with open(filename, 'w') as source:
             source.write(self.code)
             source.close()

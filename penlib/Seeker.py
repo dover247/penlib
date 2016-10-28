@@ -16,8 +16,8 @@ class Seeker(object):
         if error:
             print(error)
 
-    '''searches for files using a path and file name'''
     def search_file(self, filename, path):
+        '''searches for files using a path and file name'''
         for path, directories, files in os.walk(path):
             for Filename in files:
                 if filename.lower() in Filename.lower():

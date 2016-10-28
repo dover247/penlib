@@ -19,9 +19,9 @@ class RouterDAuth(object):
         if error:
             print(error)
 
-    '''fetches passwords given router manufacture name from
-        http://www.routerpasswords.com/'''
     def getpasswords(self, router_name):
+        '''fetches passwords given router manufacture name from
+        http://www.routerpasswords.com/'''
         payload = {"findpass": "1",
                     "router": router_name,
                     "findpassword": "Find Password"}
@@ -34,13 +34,13 @@ class RouterDAuth(object):
             self.usernames.append(table_data[3].text)
             self.passwords.append(table_data[4].text)
 
-    '''set target using url'''
     def target(self, login_page):
+        '''set target using url'''
         self.login_page = login_page
         return login_page
 
-    '''checks router Authentication using default credentials'''
     def check(self, usernames, passwords):
+        '''checks router Authentication using default credentials'''
         for username in usernames:
             for password in passwords:
                 page = requests.get(self.loginpage, auth=(username, password))
