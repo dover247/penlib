@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 
 class RouterDAuth(object):
-    '''Router Default Authentication Check'''
+    '''Router Default Authentication Check.'''
     def __init__(self):
         self.page = "http://www.routerpasswords.com/"
         self.login_page = ""
@@ -20,8 +20,8 @@ class RouterDAuth(object):
             print(error)
 
     def getpasswords(self, router_name):
-        '''fetches passwords given router manufacture name from
-        http://www.routerpasswords.com/'''
+        '''Fetches passwords given router manufacture name from
+        http://www.routerpasswords.com/.'''
         payload = {"findpass": "1",
                     "router": router_name,
                     "findpassword": "Find Password"}
@@ -35,12 +35,12 @@ class RouterDAuth(object):
             self.passwords.append(table_data[4].text)
 
     def target(self, login_page):
-        '''set target using url'''
+        '''Set target using url.'''
         self.login_page = login_page
         return login_page
 
     def check(self, usernames, passwords):
-        '''checks router Authentication using default credentials'''
+        '''Checks router Authentication using default credentials.'''
         for username in usernames:
             for password in passwords:
                 page = requests.get(self.loginpage, auth=(username, password))

@@ -2,7 +2,7 @@ from socket import *
 
 
 class NetFuzzer(object):
-    '''Fuzzer For Network Services'''
+    '''Fuzzer For Network Services.'''
     def __init__(self, host, port):
         self.sock = socket()
         self.host = host
@@ -19,12 +19,12 @@ class NetFuzzer(object):
             print(error)
 
     def buildbuffer(self, chars, length):
-        '''creates a buffer'''
+        '''Creates a buffer.'''
         self.buffer = chars * length
         return self.buffer
 
     def fuzz(self):
-        '''fuzzez the target'''
+        '''Fuzzez the target.'''
         self.sock.settimeout(10)
         self.sock.connect((self.host, self.port))
         self.sock.recv(recvsize)
@@ -33,7 +33,7 @@ class NetFuzzer(object):
         return self.sock.recv(4096)
 
     def status(self):
-        '''checks if service is still running'''
+        '''Checks if service is still running.'''
         service = socket()
         service.settimeout(10)
         service.connect((self.host, self.port))

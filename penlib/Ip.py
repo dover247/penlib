@@ -3,7 +3,7 @@ import requests
 
 
 class Ip(object):
-    '''Fetches ip using http://checkip.dyndns.org'''
+    '''Fetches ip using http://checkip.dyndns.org.'''
     def __init__(self):
         self.url = 'http://checkip.dyndns.org'
 
@@ -15,8 +15,8 @@ class Ip(object):
             print(error)
 
     def get(self):
-        '''requests a page and uses regular expressions to extract the Ip
-            and returns the value'''
+        '''Requests a page and uses regular expressions to extract the Ip
+            and returns the value.'''
         request = requests.get(self.url)
         ip = re.findall("\d{1,3}\.\d{1,3}\.\d{1,3}.\d{1,3}", request.text)[0]
         return ip

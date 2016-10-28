@@ -1,8 +1,7 @@
-
 import requests
 
 class SQLInject(object):
-    '''SQL Injection'''
+    '''SQL Injection.'''
     def __init__(self, url):
         self.errors = []
         self.url = url
@@ -18,7 +17,7 @@ class SQLInject(object):
             print(error)
 
     def urlinject(self, injection):
-        ''' inject in url '''
+        '''Inject in url.'''
         page = requests.get(self.url + injection)
         errors = re.findall('You have an error in your SQL syntax;',
                             page.content.decode())
@@ -29,6 +28,6 @@ class SQLInject(object):
         return False
 
     def forminject(self, injection):
-        '''sql inject into a form'''
+        '''Sql inject into a form.'''
         page = request.post(self.url, data=injection)
         return page.content()

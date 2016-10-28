@@ -3,7 +3,7 @@ from shutil import copy
 
 
 class CookieMonster(object):
-    '''Fetches locally stored cookies'''
+    '''Fetches locally stored cookies.'''
     def __init__(self):
         self.files = []
         self.lap = os.environ.get("localappdata")
@@ -36,7 +36,7 @@ class CookieMonster(object):
             print(error)
 
     def show(self):
-        '''attempts to display all cookies'''
+        '''Attempts to display all cookies.'''
         for paths in self.cookie_paths:
             try:
                 for filename in os.listdir(paths):
@@ -45,7 +45,7 @@ class CookieMonster(object):
                 pass
 
     def save(self, path, dir_name):
-        '''save cookies to a directory using a path'''
+        '''Save cookies to a directory using a path.'''
         cookie_jar = os.path.join(path, dir_name)
         if not os.path.exists(cookie_jar):
             os.mkdir(dirame)
