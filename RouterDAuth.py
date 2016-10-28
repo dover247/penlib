@@ -47,4 +47,3 @@ class RouterDAuth(object):
                 if page.status_code == 200:
                     return True
         return False
-x
