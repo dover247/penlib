@@ -8,7 +8,7 @@ from penlib.Seeker import *
 from penlib.System import *
 from penlib.Ip import *
 
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 __author__ = 'George Sauceda'
 __license__ = 'GPL'
 __title__ = 'penlib'
