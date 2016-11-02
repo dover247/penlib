@@ -43,7 +43,7 @@ class RouterDAuth(object):
         '''Checks router Authentication using default credentials.'''
         for username in usernames:
             for password in passwords:
-                page = requests.get(self.loginpage, auth=(username, password))
+                page = requests.get(self.login_page, auth=(username, password))
                 if page.status_code == 200:
                     return True
         return False
