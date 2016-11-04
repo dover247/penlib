@@ -12,7 +12,7 @@ pip install penlib
 from penlib import *
 
 # Creating the Object
-netgear = RouterDAuth()
+netgear = exploitation.RouterDAuth()
 
 # Retreiving Passwords
 netgear.getpasswords("netgear")
