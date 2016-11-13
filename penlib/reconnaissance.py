@@ -3,14 +3,15 @@ from bs4 import BeautifulSoup
 
 
 class Scrape(object):
-    '''Fecthes a Specific page and finds links.'''
+    '''Fecthes a Specific page and finds tags.'''
     def __init__(self, page):
+        self.tags = []
         self.page = requests.get(page)
         self.content = self.page.content
-        self.href_parser = bs4.BeautifulSoup(self.content, "html.parser")
+        self.href_parser = BeautifulSoup(self.content, "html.parser")
 
     def __len__(self):
-        return len(self.href_parser.findAll('a'))
+        return len(self.tags)
 
     def __enter__(self):
         return self
@@ -19,7 +20,8 @@ class Scrape(object):
         if error:
             print(error)
 
-    def scrape(self):
-        '''Within finding all "a" tags prints the reference links.'''
-        for link in self.href_parser.findAll("a"):
-            print(link.get("href"))
+    def scrape(self, tag):
+        '''scrapes the chosen tag.'''
+        for tags in self.href_parser.find_all(tag):
+            self.tags.append(tags)
+        return self.tags

