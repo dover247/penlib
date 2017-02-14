@@ -1,15 +1,13 @@
 # Penlib
 A Python3 Penetration Testing Package
 
-# Requirements
-- bs4
-- requests
-
 # Installing Penlib
-pip install penlib
+pip3 install penlib (Linux)
 
-# Importing specific features
-from penlib import *
+python3 -m pip install penlib (Windows)
+
+# Example Code
+from penlib import exploitation
 
 # Creating the Object
 netgear = exploitation.RouterDAuth()
