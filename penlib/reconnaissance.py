@@ -1,7 +1,6 @@
 """Reconnaissance."""
-
-from bs4 import BeautifulSoup
 import requests
+from bs4 import BeautifulSoup
 
 
 class Scrape(object):
