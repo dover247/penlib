@@ -1,8 +1,4 @@
 """Reconnaissance."""
-<<<<<<< HEAD
-import requests
-from bs4 import BeautifulSoup
-=======
 import time
 import smtplib
 import logging
@@ -51,7 +47,6 @@ class Smtp_Verify(object):
             logging.info("{} [DOWN]".format(self.target_ip))
         finally:
             time.sleep(interval)
->>>>>>> origin/master
 
 
 class Scrape(object):
